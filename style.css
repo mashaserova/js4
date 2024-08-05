@@ -1,0 +1,72 @@
+@import url('fonts.css');
+.search-wrap {
+    font-family: Roboto;
+    display: flex;
+    flex-direction: column;
+}
+.search-wrap__row {
+    margin: 62px auto 0;
+    padding: 16px;
+    width: 500px;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+.search-wrap__input {
+    height: 48px;
+    font-size: 30px;
+}
+.search-wrap__results {
+    margin: 0px auto;
+    width: 500px;
+    font-size: 24px;
+}
+
+.results-item {
+    display: none;
+    padding: 16px;
+    margin-bottom: 0px;
+}
+.results-item:hover {
+    border-radius: 4px;
+    background-color: rgb(135, 161, 161);
+}
+.results-item:last-of-type {
+    margin-bottom: 0;
+}
+.results-item.show {
+    display: block; 
+}
+
+.search-wrap__repos {
+    margin: 0 auto;
+    width: 500px;
+    padding: 16px;
+    font-size: 18px;
+}
+.repos-item {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+.repos-item::before {
+    position: absolute;
+    left: -16px;
+    content: "";
+    width: 2px;
+    height: 72px;
+    background-color: black;
+}
+/* .repos-item:first-of-type {
+    border-top: 2px solid grey;
+} */
+.repos-name {
+    margin-bottom: 6px;
+}
+.repos-owner {
+    margin-bottom: 6px;
+}
+.repos-stars {
+    margin-bottom: 6px;
+}
