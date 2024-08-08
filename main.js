@@ -3,8 +3,8 @@ const autocompleteList = document.querySelector('.search-wrap__results');
 const repositoryList = document.querySelector('.search-wrap__repos');
 const resultsItem = document.querySelectorAll('.results-item')
 //запрос
-searchInput.addEventListener('input', debounce(function() {
-    const searchText = searchInput.value; 
+searchInput.addEventListener('input', debounce(function(event) {
+    const searchText = event.target.value; //правка #2
 
     if (searchText) {
         fetch(`https://api.github.com/search/repositories?q=${searchText}&per_page=5`)
@@ -15,13 +15,15 @@ searchInput.addEventListener('input', debounce(function() {
                 return response.json();
             })
             .then(data => {
-                console.log("Данные с GitHub:", data);
-                
+                resultsItem.forEach(item => {
+                    item.removeEventListener('click', selectRepo); 
+                });
                 for (let i = 0; i < resultsItem.length; i++) {
                     if (data.items[i]) {
                         const repoName = data.items[i].full_name;
                         resultsItem[i].textContent = repoName;
-                        resultsItem[i].onclick = () => selectRepo(data.items[i]);
+                        
+                        resultsItem[i].addEventListener('click', () => selectRepo(data.items[i]), { once: true });
                         resultsItem[i].classList.add('show');
                     } else {
                         resultsItem[i].classList.remove('show'); 
@@ -29,7 +31,7 @@ searchInput.addEventListener('input', debounce(function() {
                 }
             })
             .catch(error => {
-                console.error('Произошла ошибка:', error)
+                throw new Error('Ошибка при запросе к GitHub API'); 
             });
     } else {
         for (let i = 0; i < resultsItem.length; i++) {
@@ -72,7 +74,7 @@ function selectRepo(dataRepo) {
 
     const deleteButton = Object.assign(document.createElement('img'), {
         src: 'images/delete-btn.svg',
-        className: 'delete-btn',  // className, а не classList 
+        className: 'delete-btn',
     });
 
     deleteButton.addEventListener('click', () => {
@@ -88,5 +90,9 @@ function selectRepo(dataRepo) {
     listItem.appendChild(repoSaved);
     listItem.appendChild(deleteButton);
 
-    repositoryList.appendChild(listItem)
+    repositoryList.appendChild(listItem);
+    searchInput.value = ''; 
+    for (let i = 0; i < resultsItem.length; i++) {
+        resultsItem[i].classList.remove('show');
+    }
 }
